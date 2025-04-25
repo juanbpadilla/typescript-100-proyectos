@@ -22,6 +22,18 @@ class NewBox {
   setContent(content: string|number){
     this.content = content
   }
+
+  setVisible(isVisible: boolean){
+    this.isVisible = isVisible
+  }
+
+  setState(state: State){
+    this.state = state
+  }
+
+  public cambiarEstado(): State {
+    return (this.state = ((this.state + 1) % 3) as State);
+  }
 }
 
 export const board: Array<Array<NewBox>> = Array.from({ length: dimensions.board_height }, () => {
