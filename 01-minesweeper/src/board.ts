@@ -1,11 +1,6 @@
 import { dimensions, game_state } from "./utils";
 import { State } from "./types";
 
-// class NewBox {
-//   constructor(content, )
-// }
-// type Estado = 'activo' | 'inactivo' | 'pendiente';
-
 class NewBox {
   content: string|number
   isVisible: boolean
@@ -39,36 +34,40 @@ class NewBox {
 export const board: Array<Array<NewBox>> = Array.from({ length: dimensions.board_height }, () => {
   return Array.from({ length: dimensions.board_width }, () => new NewBox(0, false, false, 0))
 })
-// export const board: Array<Array<string|number>>  = [
-//   [0,0,0,"💥",0,"💥",0,0],
-//   [0,"💥",0,0,0,0,0,0],
-//   [0,0,0,"💥",0,0,"💥",0],
-//   [0,0,0,0,0,0,"💥",0],
-//   [0,"💥",0,0,0,0,0,0],
-//   [0,0,0,"💥",0,"💥",0,0],
-//   [0,0,0,0,0,0,0,0],
-//   [0,"💥",0,0,0,0,0,0]
-// ]
 
 for (let i = 0; i < game_state.mines; i++) {
   generateMine(Math.floor(Math.random() * dimensions.board_width), Math.floor(Math.random() * dimensions.board_height))
 }
 
+const n = board.length
+  
+const directions = [
+  [-1,-1],
+  [-1,0],
+  [-1,1],
+  [0,-1],
+  [0,1],
+  [1,-1],
+  [1,0],
+  [1,1]
+]
+
 board.forEach((row, y) => {
   row.forEach((value, x) =>{
-    // console.log(value.content)
     let count = 0
     if (value.content !== "💥") {
-      if (board[y-1]?.[x-1]?.content === "💥") {count++}
-      if (board[y-1]?.[x]?.content === "💥") {count++}
-      if (board[y-1]?.[x+1]?.content === "💥") {count++}
+      for (const [dy, dx] of directions) {
+        const nx = x + dx
+        const ny = y + dy
 
-      if (board[y+1]?.[x-1]?.content === "💥") {count++}
-      if (board[y+1]?.[x]?.content === "💥") {count++}
-      if (board[y+1]?.[x+1]?.content === "💥") {count++}
-
-      if (board[y][x-1]?.content === "💥") {count++}
-      if (board[y][x+1]?.content === "💥") {count++}
+        if (
+          nx >= 0 && nx < board[0].length && 
+          ny >= 0 && ny < n && 
+          board[ny][nx].content === "💥"
+        ) {
+          count++
+        }
+      }
       board[y][x].setContent(count)
     }
   })

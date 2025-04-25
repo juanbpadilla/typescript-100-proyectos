@@ -13,5 +13,5 @@ function update() {
 canvasEvents()
 // draw()
 update()
-console.log({board})
+console.log(board)
 console.log(min, max, fontSize)
