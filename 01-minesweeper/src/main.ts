@@ -1,8 +1,8 @@
 import './style.css'
 import { board } from './board'
 import { draw } from './logic/draw-logic'
-import { fontSize, max, min } from './utils'
 import { canvasEvents } from './events/canvas-events'
+import { addGameComponents } from './components/game_app'
 
 function update() {
   // layer_draw()
@@ -11,7 +11,8 @@ function update() {
 }
 
 canvasEvents()
-// draw()
 update()
+
+addGameComponents()
+
 console.log(board)
-console.log(min, max, fontSize)

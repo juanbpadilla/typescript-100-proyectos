@@ -1,5 +1,5 @@
 import { board } from "../board";
-import { canvas } from "../components/board";
+import { canvas } from "../components/main/board";
 import { dimensions } from "../utils";
 
 export function canvasEvents() {
@@ -9,7 +9,6 @@ export function canvasEvents() {
     if (board[positiony][positionx].isVisible || board[positiony][positionx].state > 0) return
     // console.log({positionx}, {positiony})
     board[positiony][positionx].setVisible(true)
-    // console.log(board)
     if (board[positiony][positionx].content === 0) {discoverGaps(positionx, positiony)}    
   });
   canvas.addEventListener('contextmenu', (event) => {
@@ -19,7 +18,6 @@ export function canvasEvents() {
     if (board[positiony][positionx].isVisible) return
     // console.log({positionx}, {positiony})
     board[positiony][positionx].cambiarEstado();
-    // console.log(board[positiony][positionx].state)
   });
 }
 
@@ -66,14 +64,19 @@ function discoverGaps(x: number, y: number) {
       }
     }
   }
-  
-  // return -1
 }
 
 function comprobate(y: number, x: number) {
-  board[y-1]?.[x-1]?.setVisible(true)
-  board[y-1]?.[x+1]?.setVisible(true)
-  board[y+1]?.[x-1]?.setVisible(true)
-  board[y+1]?.[x+1]?.setVisible(true)
-  // console.log({y}, {x})
+  const directions = [
+    [-1,-1],
+    [-1,1],
+    [1,-1],
+    [1,1]
+  ]
+
+  for (const [dy, dx] of directions) {
+    const ny = y + dy
+    const nx = x + dx
+    board[ny]?.[nx]?.setVisible(true)
+  }
 }

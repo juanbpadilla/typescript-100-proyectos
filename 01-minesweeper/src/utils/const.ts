@@ -8,9 +8,7 @@ export const dimensions = {
   board_height: 9
 }
 
-export const game_state = {
-  mines: 10
-}
+
 
 export const max = Math.floor(dimensions.block_size*0.9)
 export const min = Math.floor(dimensions.block_size*0.05)

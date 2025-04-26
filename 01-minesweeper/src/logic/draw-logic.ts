@@ -1,6 +1,6 @@
 import { board } from "../board"
-import { ctx } from "../components/board"
-import { dimensions, fontSize, max, min } from "../utils"
+import { ctx } from "../components/main/board"
+import { dimensions, fontSize, game_utils, max, min } from "../utils"
 
 const half = dimensions.block_size/2
 
@@ -20,19 +20,15 @@ export function draw() {
           else if (value === 1) {ctx.fillStyle = '#18B6D6'}
           else if (value === 2) {ctx.fillStyle = '#789F19'}
           else if (value === 3) {ctx.fillStyle = '#C7185F'}
-          else {ctx.fillStyle = '#1851B5'}
+          else if (value === 4) {ctx.fillStyle = '#1851B5'}
+          else {ctx.fillStyle = '#931110'}
           ctx.font = `bold ${fontSize}px system-ui`;
           ctx.textAlign = "center";
           ctx.shadowColor = "#000";
           ctx.shadowOffsetY = 1;
           ctx.shadowBlur = 2;
-          // ctx.fillStyle = '#18B6D6'
           ctx.fillText(value.toString(), boardX + half, boardY + fontSize + min);
         }
-        // Restablecer las sombras después de fillText
-        ctx.shadowColor = "transparent";
-        ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = 0;
       } else {
         if (col.state === 0) {
           ctx.fillStyle = '#63B3FF'
@@ -45,8 +41,7 @@ export function draw() {
           ctx.shadowColor = "#000";
           ctx.shadowOffsetY = 1;
           ctx.shadowBlur = 2;
-          // ctx.fillStyle = '#18B6D6'
-          ctx.fillText('🚩', boardX + half, boardY + fontSize*0.9 + min);
+          ctx.fillText(game_utils.FLAG_ICON, boardX + half, boardY + fontSize*0.9 + min);
         } else {
           ctx.fillStyle = '#91C952'
           drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
@@ -55,12 +50,12 @@ export function draw() {
           ctx.shadowColor = "#fff";
           ctx.shadowBlur = 5;
           ctx.fillStyle = '#427518'
-          ctx.fillText('?', boardX + half, boardY + fontSize + min);
+          ctx.fillText(game_utils.QUESTION_MARK_ICON, boardX + half, boardY + fontSize + min);
         }
-        ctx.shadowColor = "transparent";
-        ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = 0;
       }
+      ctx.shadowColor = "transparent";
+      ctx.shadowOffsetY = 0;
+      ctx.shadowBlur = 0;
     })
   })
 }
