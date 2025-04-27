@@ -1,18 +1,20 @@
 import { board } from "../board"
 import { ctx } from "../components/main/board"
-import { canvasEvents } from "../events/canvas-events"
 import { COLORS, dimensions, fontSize, game_state, game_utils, max, min } from "../utils"
 
 const half = dimensions.block_size/2
 
-export function draw(raf: number) {
-  console.log('se dibuja')
+export function draw() {
+  // console.log('se dibuja')
+
+  
+
   board.forEach((row, y) => {
     const boardY = y*dimensions.block_size
     row.forEach((col,x) => {
       const value = col.content
       const boardX = x*dimensions.block_size
-      if (col.isVisible) {
+      if (!col.isVisible) {
         ctx.fillStyle = col.isMine() ? '#313031' : '#fff'
         drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
         
@@ -52,9 +54,7 @@ export function draw(raf: number) {
   })
 
   if (game_state.chances < 1) {
-    window.cancelAnimationFrame(raf);
-    canvasEvents()
-    window.alert("Game Over")
+    game_state.chances--
   }
 }
 

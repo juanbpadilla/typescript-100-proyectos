@@ -19,21 +19,21 @@ function discoverGaps(positionx: number, positiony: number) {
   
   const directions = [
     [0,1],
+    [0,-1],
     [1,0],
     [-1,0],
-    [0,-1]
   ]
   
   let start = [positiony, positionx];
   
-  const queue = [[ ...start, 0 ]];  
+  const queue = [[ ...start ]];  
   const visited = new Set();
-  visited.add(`${start[0]},${start[1]}`);
+  // visited.add(`${start[0]},${start[1]}`);
   
   while (queue.length > 0) {
     const current = queue.shift();
     if (!current) continue;
-    const [y, x, steps] = current;
+    const [y, x] = current;
     
     for (const [dy, dx] of directions) {
       const nx = x + dx
@@ -44,12 +44,10 @@ function discoverGaps(positionx: number, positiony: number) {
         ny >= 0 && ny < n && 
         !visited.has(`${ny},${nx}`) 
         && (board[ny][nx].content === 0 
-        || (typeof board[ny][nx].content === 'number' &&
-          board[y][x].content === 0)
-        )
+        || board[y][x].content === 0)
       ){
         visited.add(`${ny},${nx}`);
-        queue.push([ny, nx, steps + 1])
+        queue.push([ny, nx])
         board[ny][nx].setVisible(true)
         if (board[ny][nx].content === 0) {
           comprobate(ny, nx)
@@ -79,9 +77,9 @@ function handleClickListener(event: MouseEvent) {
   const positiony = Math.trunc(event.offsetY / dimensions.block_size)
 
   const cell = board[positiony][positionx]
-  if (board[positiony][positionx].isVisible || board[positiony][positionx].state > 0) return
+  if (cell.isVisible || cell.state > 0) return
   cell.setVisible(true)
-  console.log("isMine:", cell.isMine())
+  // console.log("isMine:", cell.isMine())
   if (cell.isMine()) {
     game_state.chances--
     game_state.mines--
@@ -95,6 +93,5 @@ function handleContextmenuListener(event: MouseEvent) {
   const positionx = Math.trunc(event.offsetX / dimensions.block_size)
   const positiony = Math.trunc(event.offsetY / dimensions.block_size)
   if (board[positiony][positionx].isVisible) return
-  // console.log({positionx}, {positiony})
   board[positiony][positionx].setState();
 }

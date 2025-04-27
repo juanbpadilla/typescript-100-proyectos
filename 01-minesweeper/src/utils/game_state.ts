@@ -1,8 +1,9 @@
-// const default_game_state = {
-//   mines: 10
-// }
+const default_game_state = {
+  mines: 10,
+  chances: 1
+}
 
-export const game_state = {
+export let game_state = {
   mines: 10,
   chances: 1
 }
@@ -14,4 +15,8 @@ export const game_utils = {
   COLORS: {
     STATE_BACKGROUND: ['#63B3FF', '#F7D237', '#91C952']
   }
+}
+
+export function restoreState() {
+  game_state = { ...default_game_state }
 }
