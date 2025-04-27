@@ -3,7 +3,7 @@
 // }
 
 export const game_state = {
-  mines: 20
+  mines: 10
 }
 
 export const game_utils = {

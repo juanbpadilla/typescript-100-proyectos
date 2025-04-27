@@ -23,11 +23,7 @@ class NewBox {
     this.isVisible = isVisible
   }
 
-  setState(state: State){
-    this.state = state
-  }
-
-  public cambiarEstado(): State {
+  public setState(): State {
     if (this.state === 0) {
       game_state.mines--
       lavel.innerHTML = `${game_state.mines}`
@@ -39,14 +35,9 @@ class NewBox {
   }
 }
 
-export const board: Array<Array<NewBox>> = Array.from({ length: dimensions.board_height }, () => {
-  return Array.from({ length: dimensions.board_width }, () => new NewBox(0, false, false, 0))
-})
-
-for (let i = 0; i < game_state.mines; i++) {
-  generateMine(Math.floor(Math.random() * dimensions.board_width), Math.floor(Math.random() * dimensions.board_height))
-}
-  
+// export const board: Array<Array<NewBox>> = Array.from({ length: dimensions.board_height }, () => {
+//   return Array.from({ length: dimensions.board_width }, () => new NewBox(0, false, false, 0))
+// })
 const directions = [
   [-1,-1],
   [-1,0],
@@ -58,30 +49,55 @@ const directions = [
   [1,1]
 ]
 
-board.forEach((row, y) => {
-  row.forEach((value, x) =>{
-    let count = 0
-    if (value.content !== game_utils.MINE_ICON) {
-      for (const [dy, dx] of directions) {
-        const nx = x + dx
-        const ny = y + dy
-
-        if (
-          nx >= 0 && nx < board[0].length && 
-          ny >= 0 && ny < board.length && 
-          board[ny][nx].content === game_utils.MINE_ICON
-        ) {
-          count++
-        }
-      }
-      board[y][x].setContent(count)
-    }
+export const generateBoard = (): Array<Array<NewBox>> => {
+  const genBoard = Array.from({ length: dimensions.board_height }, () => {
+    return Array.from({ length: dimensions.board_width }, () => new NewBox(0, false, false, 0))
   })
-})
 
-function generateMine(x: number, y: number) {
-  if (board[y][x].content === game_utils.MINE_ICON) {
-    return generateMine(Math.floor(Math.random() * dimensions.board_width), Math.floor(Math.random() * dimensions.board_height))
+  for (let i = 0; i < game_state.mines; i++) {
+    const [x, y] = generateMine(genBoard)
+    genBoard[y][x].setContent(game_utils.MINE_ICON)
   }
-  board[y][x].setContent(game_utils.MINE_ICON)
+
+  genBoard.forEach((row, y) => {
+    row.forEach((value, x) =>{
+      let count = 0
+      if (value.content !== game_utils.MINE_ICON) {
+        for (const [dy, dx] of directions) {
+          const nx = x + dx
+          const ny = y + dy
+  
+          if (
+            nx >= 0 && nx < genBoard[0].length && 
+            ny >= 0 && ny < genBoard.length && 
+            genBoard[ny][nx].content === game_utils.MINE_ICON
+          ) {
+            count++
+          }
+        }
+        genBoard[y][x].setContent(count)
+      }
+    })
+  })
+  
+  return genBoard
 }
+
+export const board = generateBoard()
+
+function generateMine(auxBoard: Array<Array<NewBox>>): [number, number] {
+  const x = Math.floor(Math.random() * dimensions.board_width)
+  const y = Math.floor(Math.random() * dimensions.board_height)
+
+  if (auxBoard[y][x].content === game_utils.MINE_ICON) {
+    return generateMine(auxBoard)
+  }
+
+  return [x, y]
+}
+
+
+  
+
+
+

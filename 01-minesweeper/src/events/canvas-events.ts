@@ -17,7 +17,7 @@ export function canvasEvents() {
     const positiony = Math.trunc(event.offsetY / dimensions.block_size)
     if (board[positiony][positionx].isVisible) return
     // console.log({positionx}, {positiony})
-    board[positiony][positionx].cambiarEstado();
+    board[positiony][positionx].setState();
   });
 }
 
