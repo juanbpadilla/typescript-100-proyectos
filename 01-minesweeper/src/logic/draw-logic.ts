@@ -1,27 +1,23 @@
 import { board } from "../board"
 import { ctx } from "../components/main/board"
-import { dimensions, fontSize, game_utils, max, min } from "../utils"
+import { canvasEvents } from "../events/canvas-events"
+import { COLORS, dimensions, fontSize, game_state, game_utils, max, min } from "../utils"
 
 const half = dimensions.block_size/2
 
-export function draw() {
-  
+export function draw(raf: number) {
+  console.log('se dibuja')
   board.forEach((row, y) => {
     const boardY = y*dimensions.block_size
     row.forEach((col,x) => {
       const value = col.content
       const boardX = x*dimensions.block_size
       if (col.isVisible) {
-        ctx.fillStyle = '#fff'
-        
+        ctx.fillStyle = col.isMine() ? '#313031' : '#fff'
         drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
+        
         if (value !== 0) {
-          if (typeof value !== "number") {ctx.fillStyle = '#000'}
-          else if (value === 1) {ctx.fillStyle = '#18B6D6'}
-          else if (value === 2) {ctx.fillStyle = '#789F19'}
-          else if (value === 3) {ctx.fillStyle = '#C7185F'}
-          else if (value === 4) {ctx.fillStyle = '#1851B5'}
-          else {ctx.fillStyle = '#931110'}
+          ctx.fillStyle = typeof value !== "number" ? '#000' : COLORS[value]
           ctx.font = `bold ${fontSize}px system-ui`;
           ctx.textAlign = "center";
           ctx.shadowColor = "#000";
@@ -30,21 +26,17 @@ export function draw() {
           ctx.fillText(value.toString(), boardX + half, boardY + fontSize + min);
         }
       } else {
-        if (col.state === 0) {
-          ctx.fillStyle = '#63B3FF'
-          drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
-        } else if (col.state === 1) {
-          ctx.fillStyle = '#F7D237'
-          drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
+        ctx.fillStyle = game_utils.COLORS.STATE_BACKGROUND[col.state]
+        drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
+
+        if (col.state === 1) {
           ctx.font = `${fontSize*0.8}px system-ui`;
           ctx.textAlign = "center";
           ctx.shadowColor = "#000";
           ctx.shadowOffsetY = 1;
           ctx.shadowBlur = 2;
           ctx.fillText(game_utils.FLAG_ICON, boardX + half, boardY + fontSize*0.9 + min);
-        } else {
-          ctx.fillStyle = '#91C952'
-          drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
+        } else if (col.state > 1) {
           ctx.font = `bold ${fontSize}px Verdana`;
           ctx.textAlign = "center";
           ctx.shadowColor = "#fff";
@@ -58,6 +50,12 @@ export function draw() {
       ctx.shadowBlur = 0;
     })
   })
+
+  if (game_state.chances < 1) {
+    window.cancelAnimationFrame(raf);
+    canvasEvents()
+    window.alert("Game Over")
+  }
 }
 
 function drawRoundedRect(context: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {
@@ -73,5 +71,4 @@ function drawRoundedRect(context: CanvasRenderingContext2D, x: number, y: number
   context.arcTo(x, y, x + radius, y, radius);
   context.closePath();
   context.fill();
-  // context.stroke();
 }

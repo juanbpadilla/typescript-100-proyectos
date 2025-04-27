@@ -33,6 +33,10 @@ class NewBox {
     }
     return (this.state = ((this.state + 1) % 3) as State);
   }
+
+  public isMine(): boolean {
+    return (this.isVisible && (this.content === game_utils.MINE_ICON))
+  }
 }
 
 // export const board: Array<Array<NewBox>> = Array.from({ length: dimensions.board_height }, () => {
