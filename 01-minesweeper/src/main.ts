@@ -38,3 +38,5 @@ const auxBoard = board.map((row) => {
 
 console.log(auxBoard)
 console.log(game_state.chances)
+const matchMedia = window.matchMedia("(prefers-color-scheme: dark)").matches
+console.log(matchMedia)

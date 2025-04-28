@@ -1,6 +1,6 @@
 import { board } from "../board"
 import { ctx } from "../components/main/board"
-import { COLORS, dimensions, fontSize, game_state, game_utils, max, min } from "../utils"
+import { COLORS, dimensions, FILTERS_BUTTONS, fontSize, game_state, game_utils, max, min } from "../utils"
 
 const half = dimensions.block_size/2
 
@@ -14,7 +14,7 @@ export function draw() {
     row.forEach((col,x) => {
       const value = col.content
       const boardX = x*dimensions.block_size
-      if (!col.isVisible) {
+      if (col.isVisible) {
         ctx.fillStyle = col.isMine() ? '#313031' : '#fff'
         drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
         
@@ -31,21 +31,13 @@ export function draw() {
         ctx.fillStyle = game_utils.COLORS.STATE_BACKGROUND[col.state]
         drawRoundedRect(ctx, boardX + min, boardY + min, max, max, min*2)
 
-        if (col.state === 1) {
-          ctx.font = `${fontSize*0.8}px system-ui`;
-          ctx.textAlign = "center";
-          ctx.shadowColor = "#000";
-          ctx.shadowOffsetY = 1;
-          ctx.shadowBlur = 2;
-          ctx.fillText(game_utils.FLAG_ICON, boardX + half, boardY + fontSize*0.9 + min);
-        } else if (col.state > 1) {
-          ctx.font = `bold ${fontSize}px Verdana`;
-          ctx.textAlign = "center";
-          ctx.shadowColor = "#fff";
-          ctx.shadowBlur = 5;
-          ctx.fillStyle = '#427518'
-          ctx.fillText(game_utils.QUESTION_MARK_ICON, boardX + half, boardY + fontSize + min);
-        }
+        ctx.font = FILTERS_BUTTONS[col.state].FONT;
+        ctx.textAlign = "center";
+        ctx.shadowColor = FILTERS_BUTTONS[col.state].SHADOW_COLOR;
+        ctx.shadowOffsetY = FILTERS_BUTTONS[col.state].SHADOW_OFFSET_Y;
+        ctx.shadowBlur = FILTERS_BUTTONS[col.state].SHADOW_BLUR;
+        ctx.fillStyle = FILTERS_BUTTONS[col.state].FILL_STYLE
+        ctx.fillText(FILTERS_BUTTONS[col.state].ICON, boardX + half, boardY + FILTERS_BUTTONS[col.state].FONT_SIZE + min);
       }
       ctx.shadowColor = "transparent";
       ctx.shadowOffsetY = 0;

@@ -9,6 +9,7 @@ export let game_state = {
 }
 
 export const game_utils = {
+  NONE: "",
   MINE_ICON: "💥",
   FLAG_ICON: "🚩",
   QUESTION_MARK_ICON: "?",

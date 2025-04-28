@@ -55,47 +55,53 @@ export let board: Array<Array<NewBox>>;
 // const posMin = [[0,1], [0,3], [1,8], [2,4], [4,1], [5,3], [6,3], [7,0], [7,3], [8,4]]
 
 export const generateBoard = () => {
+  const n = dimensions.board_height
+  const m = dimensions.board_width
+  const x = game_state.mines
+  
   board = Array.from({ length: dimensions.board_height }, () => {
     return Array.from({ length: dimensions.board_width }, () => new NewBox(0, false, false, 0))
   })
 
-  for (let i = 0; i < game_state.mines; i++) {
-    generateMine(Math.floor(Math.random() * dimensions.board_width), Math.floor(Math.random() * dimensions.board_height))
+  // Crear todas las posiciones posibles
+  const posiciones: [number, number][] = [];
+  for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+          posiciones.push([i, j]);
+      }
   }
 
-  board.forEach((row, y) => {
-    row.forEach((value, x) =>{
-      let count = 0
-      if (value.content !== game_utils.MINE_ICON) {
-        for (const [dy, dx] of directions) {
-          const nx = x + dx
-          const ny = y + dy
-  
-          if (
-            // nx >= 0 && nx < board[0].length && 
-            // ny >= 0 && ny < board.length && 
-            board[ny]?.[nx]?.content === game_utils.MINE_ICON
-          ) {
-            count++
-          }
-        }
-        board[y][x].setContent(count)
+  // Mezclar las posiciones aleatoriamente (Fisher-Yates Shuffle)
+  for (let i = posiciones.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [posiciones[i], posiciones[j]] = [posiciones[j], posiciones[i]];
+  }
+
+  // Elegir las primeras x posiciones
+  const minas = posiciones.slice(0, x);
+
+  // Colocar las minas
+  minas.forEach(([i, j]) => {
+    board[i][j].setContent(game_utils.MINE_ICON);
+  });
+
+  minas.forEach(([i,j]) => {
+    for (const [dy, dx] of directions) {
+      const nx = j + dx
+      const ny = i + dy
+
+      if (
+        nx >= 0 && nx < m
+        && ny >= 0 && ny < n
+        && board[ny][nx].content !== game_utils.MINE_ICON
+      ){
+        const aux = (board[ny][nx].content as number) + 1
+        board[ny][nx].setContent(aux)
       }
-    })
+    }
   })
 }
 
-// generateBoard();
-
-
-
-function generateMine(x: number, y: number) {
-
-  if (board[y][x].content === game_utils.MINE_ICON) {
-    return generateMine(Math.floor(Math.random() * dimensions.board_width), Math.floor(Math.random() * dimensions.board_height))
-  }
-  board[y][x].setContent(game_utils.MINE_ICON)
-}
 
 
 
