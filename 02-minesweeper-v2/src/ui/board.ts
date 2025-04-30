@@ -1,6 +1,7 @@
+import confetti from "canvas-confetti";
+
 import { Minesweeper } from "../core/services/Minesweeper";
 import { renderCell } from "./cell";
-
 
 /**
  * Renderiza el tablero en el DOM basado en el estado actual del juego.
@@ -23,6 +24,11 @@ export function renderBoard(game: Minesweeper) {
 
   if (game.isVictory) {
     boardElement.classList.add('victory')
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
   }
 
   // TODO: para imprimir la board en consola

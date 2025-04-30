@@ -9,7 +9,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "typescript": "~5.7.2",
     "vite": "^6.3.1"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3"
   }
 }
