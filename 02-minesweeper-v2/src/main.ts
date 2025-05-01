@@ -1,5 +1,5 @@
-import { Minesweeper } from './core/services/Minesweeper';
 import './style.css'
+import { Minesweeper } from './core/services/Minesweeper';
 import { renderBoard } from './ui/board';
 import { calculateDimension } from './ui/calculateDimension';
 

@@ -11,6 +11,11 @@ export function renderCell(game: Minesweeper, row: number, col: number): HTMLEle
   cell.dataset.row = row.toString();
   cell.dataset.col = col.toString();
 
+  const cellContent = document.createElement('div');
+  cellContent.classList.add('cell-content')
+
+  cell.appendChild(cellContent)
+
   const cellData = game.board[row][col];
 
   // Aplicar clases según el estado de la celda
@@ -18,19 +23,22 @@ export function renderCell(game: Minesweeper, row: number, col: number): HTMLEle
     cell.classList.add('covered');
   } else if (cellData.state === "flagged") {
     cell.classList.add('flagged');
-    cell.textContent = "🚩";
+    // cell.textContent = "🚩";
+    cellContent.textContent = "🚩";
   } else if (cellData.state === "questioned") {
     cell.classList.add('questioned');
-    cell.textContent = "?";
+    cellContent.textContent = "?";
   } else if (cellData.state === "uncovered") {
     if (cellData.hasMine) {
       cell.classList.add('mine');
-      cell.textContent = "💣";
+      // cell.textContent = "💣";
+      cellContent.textContent = "💣";
     } else if (cellData.adjacentMines > 0) {
       cell.classList.add('number');
       
       const value = cellData.adjacentMines
-      cell.textContent = value.toString();
+      // cell.textContent = value.toString();
+      cellContent.textContent = value.toString();
 
       const color = numberColors[value] || "#000";
       cell.style.color = color

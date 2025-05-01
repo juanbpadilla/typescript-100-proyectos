@@ -1,6 +1,6 @@
 export const boardConfig = {
   blockSize: 32,
-  maxWidthRatio: 0.65,
+  maxWidthRatio: 0.7,
   maxHeightRatio: 0.65,
   minBlockSize: 22,
   maxBlockSize: 64,

@@ -1,28 +1,51 @@
 :root {
   --border-radius: 5px; 
   --fontSize: 20px;
+
+  font-size: var(--fontSize); 
+  color: rgba(255, 255, 255, 0.871);
+  background: #292839;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  font-size: var(--fontSize);
-}
+/* html {
+   
+} */
 
 body {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background: #292839;
-  color: #ffffffde;
-  
+  min-height: 100vh;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;  
+  display: grid;
+  place-items: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+body > h1 {
+  position: absolute;
+  font-size: 5vh;
+  margin: 0;
+  top: 4vh;
 }
 
 #board {
   color: #000;
   margin: 0 auto;
-  min-width: 50%;
-  max-height: 100vh;
+  height: 100%;
 }
 
 .cell {
+  padding: 0.07rem;
+}
+
+.cell > .cell-content {
   display: flex;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
   font-family: sans-serif;
@@ -30,35 +53,35 @@ body {
   font-weight: bold;
   user-select: none;
   cursor: pointer;
-  text-shadow: 0 0.04rem 0.07rem rgba(0, 0, 0, 0.9);
+  text-shadow: 0 0.04rem 0.05rem rgba(0, 0, 0, 0.701);
   border-radius: var(--border-radius);
-  border: 0.05rem solid #292839;
   box-shadow: 
     inset 0 0 0.05rem 0.02rem rgba(0,0,0, 0.99),
     0.3em 0.3em 1em rgba(0, 0, 100, 0.8);
   transition: box-shadow 0.2s, background 0.2s;
 }
 
-.cell.covered {
+.cell.covered > .cell-content {
   background: radial-gradient(#7BD5FF, #5AA6F7 80%);
 }
 
-.cell.flagged {
+.cell.flagged > .cell-content {
   background: radial-gradient(#ffe062, #F7D237 80%);
+  font-size: 0.9rem;
 }
 
-.cell.questioned {
+.cell.questioned > .cell-content {
   background: radial-gradient(#a0db5d, #91C952 70%);
   color: #5E9C25;
 }
 
-.cell.mine {
+.cell.mine > .cell-content {
   background-color: red;
 }
 
-#board.victory > .cell.mine,
-.cell.number,
-.cell.empty {
+#board.victory > .cell.mine > .cell-content,
+.cell.number > .cell-content,
+.cell.empty > .cell-content {
   background: #fff;
   box-shadow:
     inset 0 0 0.15rem 0.045rem rgba(0,0,0, 0.99),
