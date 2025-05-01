@@ -2,6 +2,10 @@ import confetti from "canvas-confetti";
 
 import { Minesweeper } from "../core/services/Minesweeper";
 import { renderCell } from "./cell";
+import { boardConfig } from "../core/services/config";
+// import { boardConfig } from "../utils/helpers";
+
+
 
 /**
  * Renderiza el tablero en el DOM basado en el estado actual del juego.
@@ -12,15 +16,18 @@ export function renderBoard(game: Minesweeper) {
   if (!boardElement) {
     throw new Error("No se encontró el elemento #board en el HTML.");
   }
-
   // Limpiar tablero anterior si existía
   boardElement.innerHTML = '';
 
+  
+
   // Establecer el estilo de la grilla
+  boardElement.style.width = `${game.cols * boardConfig.blockSize}px`
+  boardElement.style.height = `${game.rows * boardConfig.blockSize}px`
   boardElement.style.display = "grid";
   boardElement.style.gridTemplateRows = `repeat(${game.rows}, 1fr)`;
   boardElement.style.gridTemplateColumns = `repeat(${game.cols}, 1fr)`;
-  boardElement.style.gap = `3px`
+  // boardElement.style.gap = `${gapSize}px`
 
   if (game.isVictory) {
     boardElement.classList.add('victory')
@@ -31,7 +38,6 @@ export function renderBoard(game: Minesweeper) {
     });
   }
 
-  // TODO: para imprimir la board en consola
   // console.log(game.board.map((row) => {
   //   return row.map((col) => col.value.toString())
   // }))

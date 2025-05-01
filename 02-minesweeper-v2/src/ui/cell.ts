@@ -1,3 +1,4 @@
+import { numberColors } from "../core/services/config";
 import { Minesweeper } from "../core/services/Minesweeper";
 import { renderBoard } from "./board";
 
@@ -27,7 +28,12 @@ export function renderCell(game: Minesweeper, row: number, col: number): HTMLEle
       cell.textContent = "💣";
     } else if (cellData.adjacentMines > 0) {
       cell.classList.add('number');
-      cell.textContent = cellData.adjacentMines.toString();
+      
+      const value = cellData.adjacentMines
+      cell.textContent = value.toString();
+
+      const color = numberColors[value] || "#000";
+      cell.style.color = color
     } else {
       cell.classList.add('empty');
     }
